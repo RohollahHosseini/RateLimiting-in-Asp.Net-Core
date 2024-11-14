@@ -10,27 +10,28 @@ builder.Services.AddSwaggerGen();
 
 #region Global RateLimiting
 
-builder.Services.AddRateLimiter(p => 
-{
-    p.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+//builder.Services.AddRateLimiter(p => 
+//{
+//    p.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
 
-        RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.User.Identity?.Name ??
-            httpContext.Request.Headers.Host.ToString(),
-            partition => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit=3,
-                Window=TimeSpan.FromSeconds(5),
-                QueueLimit=1,
-                QueueProcessingOrder=QueueProcessingOrder.OldestFirst,
+//        RateLimitPartition.GetFixedWindowLimiter(
+//            httpContext.User.Identity?.Name ??
+//            httpContext.Request.Headers.Host.ToString(),
+//            partition => new FixedWindowRateLimiterOptions
+//            {
+//                PermitLimit=3,
+//                Window=TimeSpan.FromSeconds(5),
+//                QueueLimit=1,
+//                QueueProcessingOrder=QueueProcessingOrder.OldestFirst,
 
-            }));
-});
+//            }));
+//});
 
 #endregion
 
-#region RateLimiting
+#region RateLimiting Algorithms
 
+//1-Fixed Window Limit
 builder.Services.AddRateLimiter(p => 
 {
     p.AddFixedWindowLimiter("MyRateFixed", options =>
@@ -49,6 +50,48 @@ builder.Services.AddRateLimiter(p =>
     //};
 
 });
+
+//2-Sliding Window Limit
+
+builder.Services.AddRateLimiter(p => 
+{
+    p.AddSlidingWindowLimiter("Sliding", options => 
+    {
+        options.PermitLimit = 5;//تعداد درخواست
+        options.Window =TimeSpan.FromSeconds(5);//زمان اجرای درخواست
+
+        options.SegmentsPerWindow = 3;//زمان اجرا را به سه قسمت تقسیم میکنیم
+
+        options.QueueLimit = 1;
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+
+    });
+});
+
+//3-Token Bucket Limit
+builder.Services.AddRateLimiter(p => 
+{
+    p.AddTokenBucketLimiter("tokenBucket", options =>
+    {
+        options.TokenLimit = 4;
+        options.TokensPerPeriod = 2;//در هر دوره برای ما 2تاتوکن اضافه کند
+        options.ReplenishmentPeriod=TimeSpan.FromSeconds(5);//در هر 5 ثانیه 2 تا توکن اضافه کن
+        options.QueueLimit = 6;
+    });
+});
+
+//4-Concurrncy Limitدر هر لحظه در این مثال 5تا درخواست داریم
+
+builder.Services.AddRateLimiter(p =>
+{
+    p.AddConcurrencyLimiter("ConcurrncyLimit", options =>
+    {
+        options.PermitLimit = 5;
+        options.QueueLimit = 1;
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+});
+
 
 #endregion
 
@@ -85,7 +128,10 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast")
-//.RequireRateLimiting("MyRateFixed")
+//.RequireRateLimiting("MyRateFixed")//Fixed Window Limit
+//.RequireRateLimiting("Sliding")//Sliding Window Limiter
+//.RequireRateLimiting("tokenBucket")//Token Bucket Limiter
+//.RequireRateLimiting("ConcurrncyLimit")//ConcurrncyLimiter
 .WithOpenApi();
 
 app.Run();
