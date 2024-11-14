@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RateLimiting in WebApi", "RateLimiting in WebApi\RateLimiting in WebApi.csproj", "{71E437F1-210E-4315-B89E-764879D9D030}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RateLimiting in MVC", "RateLimiting in MVC\RateLimiting in MVC.csproj", "{533A1EE9-B189-4F76-996C-B9FCF7ECBC16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{71E437F1-210E-4315-B89E-764879D9D030}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71E437F1-210E-4315-B89E-764879D9D030}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71E437F1-210E-4315-B89E-764879D9D030}.Release|Any CPU.Build.0 = Release|Any CPU
+		{533A1EE9-B189-4F76-996C-B9FCF7ECBC16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{533A1EE9-B189-4F76-996C-B9FCF7ECBC16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{533A1EE9-B189-4F76-996C-B9FCF7ECBC16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{533A1EE9-B189-4F76-996C-B9FCF7ECBC16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

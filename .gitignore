@@ -9,3 +9,5 @@
 /.vs/RateLimiting in Asp.Net Core/v17/.wsuo
 /.vs
 /src/RateLimiting/RateLimiting in WebApi/bin/Debug/net8.0
+/src/RateLimiting/RateLimiting in MVC/bin/Debug/net8.0
+/src/RateLimiting/RateLimiting in MVC/obj
