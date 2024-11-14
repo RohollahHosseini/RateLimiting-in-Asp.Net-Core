@@ -8,7 +8,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+#region Global RateLimiting
 
+builder.Services.AddRateLimiter(p => 
+{
+    p.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+
+        RateLimitPartition.GetFixedWindowLimiter(
+            httpContext.User.Identity?.Name ??
+            httpContext.Request.Headers.Host.ToString(),
+            partition => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit=3,
+                Window=TimeSpan.FromSeconds(5),
+                QueueLimit=1,
+                QueueProcessingOrder=QueueProcessingOrder.OldestFirst,
+
+            }));
+});
+
+#endregion
 
 #region RateLimiting
 
@@ -66,7 +85,7 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast")
-.RequireRateLimiting("MyRateFixed")
+//.RequireRateLimiting("MyRateFixed")
 .WithOpenApi();
 
 app.Run();
