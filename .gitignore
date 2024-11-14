@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/RateLimiting/.vs/RateLimiting
+/src/RateLimiting/RateLimiting in WebApi/obj
+/.vs/RateLimiting in Asp.Net Core/FileContentIndex
+/.vs/RateLimiting in Asp.Net Core/v17/DocumentLayout.json
+/.vs/RateLimiting in Asp.Net Core/v17/.wsuo
+/.vs
